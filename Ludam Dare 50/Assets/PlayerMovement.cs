@@ -21,7 +21,7 @@ public class PlayerMovement : MonoBehaviour
 	public List<Transform> requiredMedicines = new List<Transform>();
 	bool isfinished;
 
-	float timeRemaining = 19f;
+	float timeRemaining = 19;
 	bool timerIsRunning = false;
 
 	public Text timerText;
@@ -60,6 +60,7 @@ public class PlayerMovement : MonoBehaviour
 			if (timeRemaining > 0)
 			{
 				timeRemaining -= Time.deltaTime;
+				DisplayTime(timeRemaining);
 			}
 			else
 			{
@@ -71,7 +72,18 @@ public class PlayerMovement : MonoBehaviour
 				timerIsRunning = false;
 			}
 		}
-		DisplayTime(timeRemaining);
+
+		Vector3 dropPosition = Vector3.forward * 15;
+
+		if (Input.GetKeyDown(KeyCode.E))
+		{
+			for (int i = 0; i < collectedItems.Count; i++)
+			{
+				collectedItems[i].position = dropPosition;
+				collectedItems[i].gameObject.SetActive(true);
+				collectedItems.Remove(collectedItems[i]);
+			}
+		}
 
 	}
 
@@ -110,11 +122,11 @@ public class PlayerMovement : MonoBehaviour
 
 	public void DisplayTime(float timeToDisplay)
 	{
+		timeToDisplay += 1;
+
 		float minutes = Mathf.FloorToInt(timeToDisplay / 60);
 		float seconds = Mathf.FloorToInt(timeToDisplay % 60);
-
 		timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
-
 	}
 }
 
