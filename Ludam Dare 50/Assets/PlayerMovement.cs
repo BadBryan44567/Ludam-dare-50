@@ -16,6 +16,10 @@ public class PlayerMovement : MonoBehaviour
 
 	public float jumpHeight = 3;
 
+	List<Transform> collectedItems = new List<Transform>();
+	public List<Transform> requiredMedicines = new List<Transform>();
+	bool isfinished;
+
 	// Update is called once per frame
 	void Update()
 	{
@@ -42,11 +46,37 @@ public class PlayerMovement : MonoBehaviour
 
 	}
 
+	bool isTaskFinished()
+	{
+		if (collectedItems.Count != requiredMedicines.Count)
+		{
+			return false;
+		}
+		for (int i = 0; i < collectedItems.Count; i++)
+		{
+			if (collectedItems[i] != requiredMedicines[i])
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
 	private void OnTriggerEnter(Collider other)
 	{
 		if (other.tag == "Pickup Item")
 		{
-			Destroy(other.gameObject);
+			collectedItems.Add(other.gameObject.transform);
+			other.gameObject.SetActive(false);
+		}
+
+		if (other.tag == "Finish")
+		{
+			if (isTaskFinished())
+			{
+				print("Finish");
+			}
 		}
 	}
 }
+
