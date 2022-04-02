@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -22,6 +23,8 @@ public class PlayerMovement : MonoBehaviour
 
 	float timeRemaining = 19f;
 	bool timerIsRunning = false;
+
+	public Text timerText;
 
 	private void Start()
 	{
@@ -68,6 +71,7 @@ public class PlayerMovement : MonoBehaviour
 				timerIsRunning = false;
 			}
 		}
+		DisplayTime(timeRemaining);
 
 	}
 
@@ -102,6 +106,15 @@ public class PlayerMovement : MonoBehaviour
 				isfinished = true;
 			}
 		}
+	}
+
+	public void DisplayTime(float timeToDisplay)
+	{
+		float minutes = Mathf.FloorToInt(timeToDisplay / 60);
+		float seconds = Mathf.FloorToInt(timeToDisplay % 60);
+
+		timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+
 	}
 }
 
