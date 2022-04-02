@@ -20,6 +20,14 @@ public class PlayerMovement : MonoBehaviour
 	public List<Transform> requiredMedicines = new List<Transform>();
 	bool isfinished;
 
+	float timeRemaining = 19f;
+	bool timerIsRunning = false;
+
+	private void Start()
+	{
+		timerIsRunning = true;
+	}
+
 	// Update is called once per frame
 	void Update()
 	{
@@ -44,9 +52,26 @@ public class PlayerMovement : MonoBehaviour
 		velocity.y += gravity * Time.deltaTime;
 		controller.Move(velocity * Time.deltaTime);
 
+		if (timerIsRunning)
+		{
+			if (timeRemaining > 0)
+			{
+				timeRemaining -= Time.deltaTime;
+			}
+			else
+			{
+				if (isfinished != true)
+				{
+					print("Time has run out!");
+				}
+				timeRemaining = 0;
+				timerIsRunning = false;
+			}
+		}
+
 	}
 
-	bool isTaskFinished()
+	bool broughtCorrectMedicines()
 	{
 		if (collectedItems.Count != requiredMedicines.Count)
 		{
@@ -72,9 +97,9 @@ public class PlayerMovement : MonoBehaviour
 
 		if (other.tag == "Finish")
 		{
-			if (isTaskFinished())
+			if (broughtCorrectMedicines())
 			{
-				print("Finish");
+				isfinished = true;
 			}
 		}
 	}
