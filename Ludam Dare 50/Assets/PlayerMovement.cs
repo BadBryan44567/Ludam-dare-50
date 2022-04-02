@@ -73,15 +73,15 @@ public class PlayerMovement : MonoBehaviour
 			}
 		}
 
-		Vector3 dropPosition = Vector3.forward * 15;
-
 		if (Input.GetKeyDown(KeyCode.E))
 		{
-			for (int i = 0; i < collectedItems.Count; i++)
+			for (int i = 0; i < collectedItems.Count;)
 			{
-				collectedItems[i].position = dropPosition;
+				Vector3 previousPosition = collectedItems[i].position;
+				collectedItems[i].position = transform.position + previousPosition / 2;
 				collectedItems[i].gameObject.SetActive(true);
 				collectedItems.Remove(collectedItems[i]);
+				break;
 			}
 		}
 
