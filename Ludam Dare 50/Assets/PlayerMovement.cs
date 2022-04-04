@@ -17,8 +17,10 @@ public class PlayerMovement : MonoBehaviour
 
 	public float jumpHeight = 3;
 
-	List<Transform> collectedItems = new List<Transform>();
-	public List<Transform> requiredMedicines = new List<Transform>();
+	private static List<Transform> collectedItems = new List<Transform>();
+	public static List<Transform> requiredMedicines = new List<Transform>();
+	public static List<Transform> droppedItems = new List<Transform>();
+
 	bool isfinished;
 
 	float timeRemaining = 19;
@@ -73,34 +75,21 @@ public class PlayerMovement : MonoBehaviour
 			}
 		}
 
+		Vector3 offset = new Vector3(2f, -0.84f, 1f);
+
 		if (Input.GetKeyDown(KeyCode.E))
 		{
 			for (int i = 0; i < collectedItems.Count;)
 			{
 				Vector3 previousPosition = collectedItems[i].position;
-				collectedItems[i].position = transform.position + previousPosition / 2;
+				collectedItems[i].position = transform.position + offset;
 				collectedItems[i].gameObject.SetActive(true);
+				droppedItems.Add(collectedItems[i]);
 				collectedItems.Remove(collectedItems[i]);
 				break;
 			}
 		}
 
-	}
-
-	bool broughtCorrectMedicines()
-	{
-		if (collectedItems.Count != requiredMedicines.Count)
-		{
-			return false;
-		}
-		for (int i = 0; i < collectedItems.Count; i++)
-		{
-			if (collectedItems[i] != requiredMedicines[i])
-			{
-				return false;
-			}
-		}
-		return true;
 	}
 
 	private void OnTriggerEnter(Collider other)
@@ -109,14 +98,6 @@ public class PlayerMovement : MonoBehaviour
 		{
 			collectedItems.Add(other.gameObject.transform);
 			other.gameObject.SetActive(false);
-		}
-
-		if (other.tag == "Finish")
-		{
-			if (broughtCorrectMedicines())
-			{
-				isfinished = true;
-			}
 		}
 	}
 
